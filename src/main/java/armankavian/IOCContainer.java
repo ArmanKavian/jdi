@@ -16,9 +16,9 @@ public class IOCContainer {
         Reflections reflections = new Reflections("armankavian");
         for (Class<?> clazz : reflections.getTypesAnnotatedWith(ControlClass.class)) {
             try {
-                Object controlClass = clazz.getConstructor().newInstance();
+                Object controlClassInstance = clazz.getConstructor().newInstance();
 
-                System.out.println(controlClass.toString());
+                pool.put(clazz.getSimpleName().toLowerCase(), controlClassInstance);
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -27,6 +27,10 @@ public class IOCContainer {
 
     private IOCContainer() {
         init();
+    }
+
+    public Object get(String name) {
+        return pool.get(name);
     }
 
     public Map<String, Object> getPool() {
